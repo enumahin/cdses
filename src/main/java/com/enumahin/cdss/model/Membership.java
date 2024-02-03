@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +17,7 @@ public class Membership {
 
     @Id
     @Column(name = "membership_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer membershipId;
 
     @OneToOne
@@ -25,7 +27,7 @@ public class Membership {
     private SetMember member;
 
     @Column(name = "degree_of_membership")
-    private DegreeEnum degreeOfMembership;
+    private Double degreeOfMembership;
 //
 //    @OneToOne
 //    @JoinColumn(name = "degree_level")

@@ -18,6 +18,7 @@ public class FuzzySet {
 
     @Id
     @Column(name = "set_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer setId;
 
     @Column(name = "set_name")
@@ -26,6 +27,6 @@ public class FuzzySet {
     @Column(name ="set_description")
     private String setDescription;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<SetMember> members;
 }
