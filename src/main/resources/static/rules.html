@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CDSS | Rules</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
@@ -45,6 +45,9 @@
     <div class="d-flex card-header">
       <div class="p2 flex-grow-1">
         <p class="pt-10">Defined Rules</p>
+        <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-toggle="modal"
+                data-control="member" data-title="Add Member" data-target="#exampleModal">Add Rules</button>
+
       </div>
     </div>
     <div class="card-body">
@@ -54,29 +57,11 @@
           <th scope="col">Program Area (Fuzzy Set)</th>
           <th scope="col">Data Element (Member of a Set)</th>
           <th scope="col">Degree of Membership (0, 0.25, 0.50, 0.75, 1)</th>
-          <th scope="col">Casualty Level (L, E, H)</th>
+          <th scope="col">Required (Is this a required Attribute)</th>
           <th scope="col">Action</th>
         </tr>
         </thead>
-        <tbody class="table-group-divider">
-        <tr>
-          <th scope="row">Enhanced Adherence Counselling</th>
-          <td>Last Viral Load Result</td>
-          <td>0 (Unsuppressed)</td>
-          <td>E</td>
-          <td>
-            <div class="d-flex">
-              <div class="p2" style="margin-right: .20em">
-                <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Edit</button>
-              </div>
-              <div class="p2">
-                <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Delete</button>
-              </div>
-            </div>
-          </td>
-        </tr>
+        <tbody class="table-group-divider" id="membershipTable">
 
         </tbody>
       </table>
@@ -101,8 +86,41 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+  function fetchMemberships() {
+    fetch(window.location.origin + "/memberships" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let output = "";
+              data.forEach(membership => {
+                output += `
+                <tr>
+                    <th scope="row">${membership.setName}</th>
+                    <td>${membership.memberName}</td>
+                    <td>${membership.degreeOfMembership} (${membership.degreeDescription})</td>
+                    <td>${membership.required}</td>
+                    <td>
+                      <div class="d-flex">
+                        <div class="p2" style="margin-right: .20em">
+                          <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModal">Edit</button>
+                        </div>
+                        <div class="p2">
+                          <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModal">Delete</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              });
+              document.getElementById("membershipTable").innerHTML = output;
+            });
+  }
+  fetchMemberships();
+</script>
 </body>
 </html>

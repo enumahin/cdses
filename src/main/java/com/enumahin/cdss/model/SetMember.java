@@ -21,7 +21,7 @@ public class SetMember {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer memberId;
 
-    @Column(name = "member_name")
+    @Column(name = "member_name", unique = true)
     private String memberName;
 
     @Column(name = "member_description")

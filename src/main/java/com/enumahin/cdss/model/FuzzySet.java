@@ -21,7 +21,7 @@ public class FuzzySet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer setId;
 
-    @Column(name = "set_name")
+    @Column(name = "set_name", unique = true)
     private String setName;
 
     @Column(name ="set_description")

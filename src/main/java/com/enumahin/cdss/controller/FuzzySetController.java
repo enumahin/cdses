@@ -23,8 +23,9 @@ public class FuzzySetController {
         return fuzzySetService.findAll();
     }
 
-    @PostMapping
-    public ResponseEntity<FuzzySet> create(FuzzySet fuzzySet) {
+    @PostMapping(value = "/add")
+    public ResponseEntity<FuzzySet> create(@RequestBody FuzzySet fuzzySet) {
+        System.out.println(fuzzySet);
         return new ResponseEntity<>(fuzzySetService.addSet(fuzzySet), HttpStatus.CREATED);
     }
 

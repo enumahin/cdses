@@ -3,6 +3,7 @@ package com.enumahin.cdss.controller;
 import com.enumahin.cdss.model.*;
 import com.enumahin.cdss.model.dto.MatchList;
 import com.enumahin.cdss.model.dto.MatchResponse;
+import com.enumahin.cdss.model.dto.MembershipResponse;
 import com.enumahin.cdss.service.MemberDegreeService;
 import com.enumahin.cdss.service.MembershipService;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class MembershipController {
     }
 
     @GetMapping
-    public List<Membership> getAll(){
-        return membershipService.findAll();
+    public List<MembershipResponse> getAll(){
+        return membershipService.build();
     }
 
     @PostMapping

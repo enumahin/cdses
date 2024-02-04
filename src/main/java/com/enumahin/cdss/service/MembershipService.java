@@ -5,6 +5,7 @@ import com.enumahin.cdss.model.Equality;
 import com.enumahin.cdss.model.Membership;
 import com.enumahin.cdss.model.dto.MatchList;
 import com.enumahin.cdss.model.dto.MatchResponse;
+import com.enumahin.cdss.model.dto.MembershipResponse;
 import com.enumahin.cdss.repository.MembershipRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,14 @@ public class MembershipService {
 
     private final MembershipRepository membershipRepository;
 
-    // Map<SetId, Map<TotalMemberCount, RequiredMemberCount>
-    private Map<Integer, MatchResponse> setSignatureMap = new HashMap<>();
+    private final MemberDegreeService memberDegreeService;
 
-    public MembershipService(MembershipRepository membershipRepository) {
+    // Map<SetId, Map<TotalMemberCount, RequiredMemberCount>
+    private final Map<Integer, MatchResponse> setSignatureMap = new HashMap<>();
+
+    public MembershipService(MembershipRepository membershipRepository, MemberDegreeService memberDegreeService) {
         this.membershipRepository = membershipRepository;
+        this.memberDegreeService = memberDegreeService;
     }
 
     @Transactional
@@ -72,6 +76,27 @@ public class MembershipService {
         return membershipRepository.findAll();
     }
 
+    public List<MembershipResponse> build(){
+        return findAll().stream()
+                .map(getMembershipMembershipResponseFunction()
+                ).toList();
+    }
+
+    private Function<Membership, MembershipResponse> getMembershipMembershipResponseFunction() {
+        return membership -> MembershipResponse
+                .builder()
+                .membershipId(membership.getMembershipId())
+                .setId(membership.getSet().getSetId())
+                .setName(membership.getSet().getSetName())
+                .memberId(membership.getMember().getMemberId())
+                .memberName(membership.getMember().getMemberName())
+                .degreeOfMembership(membership.getDegreeOfMembership())
+                .degreeDescription(memberDegreeService.getMembershipDescription(membership.getMember().getMemberId(),
+                        membership.getDegreeOfMembership()))
+                .required(membership.getRequired())
+                .build();
+    }
+
     public Optional<Membership> getById(Integer id) {
         return membershipRepository.findById(id);
     }
@@ -94,19 +119,22 @@ public class MembershipService {
 
     public List<MatchResponse> matchStructure(MatchList matchList){
         return match(matchList).entrySet().stream()
-                .flatMap(membershipMap -> Stream.of(MatchResponse.builder()
-                                            .setId(membershipMap.getKey().getSet().getSetId())
-                                            .setName(membershipMap.getKey().getSet().getSetName())
-                                            .actualRequiredCount(
-                                                    membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0)
-                                            .expectedRequiredCount(mapSignature(membershipMap.getKey().getSet().getSetId()).getExpectedRequiredCount())
-                                            .actualTotalCount(
-                                                    (membershipMap.getValue().get(false) != null ? membershipMap.getValue().get(false).intValue() : 0) +
-                                                    (membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0))
-                                            .expectedTotalCount(mapSignature(membershipMap.getKey().getSet().getSetId()).getExpectedTotalCount())
-                                            .build())
-                                            ).toList();
+                .flatMap(membershipMap -> Stream.of(fromMembership(membershipMap))).toList();
 
+    }
+
+    private MatchResponse fromMembership(Map.Entry<Membership, Map<Boolean, Long>> membershipMap){
+         return MatchResponse.builder()
+                .setId(membershipMap.getKey().getSet().getSetId())
+                .setName(membershipMap.getKey().getSet().getSetName())
+                .actualRequiredCount(
+                        membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0)
+                .expectedRequiredCount(mapSignature(membershipMap.getKey().getSet().getSetId()).getExpectedRequiredCount())
+                .actualTotalCount(
+                        (membershipMap.getValue().get(false) != null ? membershipMap.getValue().get(false).intValue() : 0) +
+                                (membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0))
+                .expectedTotalCount(mapSignature(membershipMap.getKey().getSet().getSetId()).getExpectedTotalCount())
+                .build();
     }
 
     private MatchResponse mapSignature(Integer setId) {

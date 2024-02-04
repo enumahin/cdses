@@ -2,6 +2,8 @@ package com.enumahin.cdss.controller;
 
 import com.enumahin.cdss.model.MemberDegree;
 import com.enumahin.cdss.model.SetMember;
+import com.enumahin.cdss.model.dto.MemberDegreeDto;
+import com.enumahin.cdss.model.dto.MemberDegreeResponse;
 import com.enumahin.cdss.service.MemberDegreeService;
 import com.enumahin.cdss.service.SetMemberService;
 import org.springframework.http.HttpStatus;
@@ -21,12 +23,12 @@ public class MemberDegreeController {
     }
 
     @GetMapping
-    public List<MemberDegree> getAll(){
-        return memberDegreeService.findAll();
+    public List<MemberDegreeResponse> getAll(){
+        return memberDegreeService.memberDegreeResponse();
     }
 
-    @PostMapping
-    public ResponseEntity<MemberDegree> create(@RequestBody MemberDegree memberDegree) {
+    @PostMapping(value = "/add")
+    public ResponseEntity<MemberDegree> create(@RequestBody MemberDegreeDto memberDegree) {
         return new ResponseEntity<>(memberDegreeService.addMemberDegree(memberDegree), HttpStatus.CREATED);
     }
 

@@ -25,7 +25,7 @@ public class SetMemberController {
         return setMemberService.findAll();
     }
 
-    @PostMapping
+    @PostMapping(value = "/add")
     public ResponseEntity<SetMember> create(@RequestBody SetMember setMember) {
         return new ResponseEntity<>(setMemberService.addMember(setMember), HttpStatus.CREATED);
     }

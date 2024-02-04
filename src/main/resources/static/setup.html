@@ -4,8 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CDSS | Setup</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
@@ -40,14 +39,16 @@
       </h2>
     </div>
   </div>
+</div>
   <div class="row" style="margin-bottom: 1em">
-    <div class="col-6 card">
+    <div class="col-4 card">
           <div class="d-flex card-header">
             <div class="p2 flex-grow-1">
               <p class="pt-10">Fuzzy Sets (Program Areas)</p>
             </div>
             <div class="p2">
-              <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Set</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-toggle="modal"
+                      data-control="set" data-title="Add Set" data-target="#exampleModal">Add Set</button>
             </div>
           </div>
       <div class="card-body">
@@ -56,38 +57,24 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Program Area</th>
+            <th scope="col">Description</th>
             <th scope="col">Action</th>
           </tr>
           </thead>
-          <tbody class="table-group-divider">
-          <tr>
-            <th scope="row">1</th>
-            <td>Enhanced Adherence Counselling</td>
-            <td>
-              <div class="d-flex">
-                <div class="p2" style="margin-right: .20em">
-                  <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
-                          data-bs-target="#exampleModal">Edit</button>
-                </div>
-                <div class="p2">
-                  <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
-                          data-bs-target="#exampleModal">Delete</button>
-                </div>
-              </div>
-            </td>
-          </tr>
+          <tbody class="table-group-divider" id="setTable">
+
           </tbody>
         </table>
       </div>
     </div>
-    <div class="col-6 card">
+    <div class="col-4 card">
           <div class="d-flex card-header">
             <div class="p2 flex-grow-1">
               <p class="pt-10">Set Members (Data Elements)</p>
             </div>
             <div class="p2">
-              <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Member</button>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-toggle="modal"
+                      data-control="member" data-title="Add Member" data-target="#exampleModal">Add Member</button>
 
             </div>
           </div>
@@ -97,32 +84,46 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Data Element</th>
+            <th scope="col">Description</th>
             <th scope="col">Action</th>
           </tr>
           </thead>
-          <tbody class="table-group-divider">
+          <tbody class="table-group-divider"  id="memberTable">
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-4 card">
+          <div class="d-flex card-header">
+            <div class="p2 flex-grow-1">
+              <p class="pt-10">Set Members (Data Elements)</p>
+            </div>
+            <div class="p2">
+              <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-toggle="modal"
+                      data-control="memberDegree" data-title="Define Member Degree" data-target="#exampleModal">Define Member Degree</button>
+
+            </div>
+          </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
           <tr>
-            <th scope="row">1</th>
-            <td>Last Viral Load Result</td>
-            <td>
-              <div class="d-flex">
-                <div class="p2" style="margin-right: .20em">
-                  <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
-                          data-bs-target="#exampleModal">Edit</button>
-                </div>
-                <div class="p2">
-                  <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
-                          data-bs-target="#exampleModal">Delete</button>
-                </div>
-              </div>
-            </td>
+            <th scope="col">#</th>
+            <th scope="col">Member</th>
+            <th scope="col">Degree</th>
+            <th scope="col">Description</th>
+            <th scope="col">Action</th>
           </tr>
+          </thead>
+          <tbody class="table-group-divider"  id="memberDegreeTable">
+
           </tbody>
         </table>
       </div>
     </div>
   </div>
-</div>
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -133,37 +134,275 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="member" style="display: none">
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
+            <label for="memberName" class="col-form-label">Member (Data Element | Attribute):</label>
+            <input type="text" class="form-control" id="memberName" value="">
           </div>
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
+            <label for="memberDescription" class="col-form-label">Description:</label>
+            <textarea class="form-control" id="memberDescription"></textarea>
+          </div>
+        </form>
+        <form id="memberDegree" style="display: none">
+          <div class="form-group">
+            <label for="memberName" class="col-form-label">Member (Data Element | Attribute):</label>
+            <select type="text" class="form-control" id="memberId">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="degree" class="col-form-label">Degree:</label>
+            <select type="text" class="form-control" id="degree">
+              <option value="0d">0</option>
+              <option value="0.25">0.25</option>
+              <option value="0.5">0.5</option>
+              <option value="0.75">0.75</option>
+              <option value="1d">1</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="memberDescription" class="col-form-label">Description:</label>
+            <textarea class="form-control" id="description"></textarea>
+          </div>
+        </form>
+        <form id="set" style="display: none">
+          <div class="form-group">
+            <label for="setName" class="col-form-label">Fuzzy Set (Program Area | What Should be done):</label>
+            <input type="text" class="form-control" id="setName">
+          </div>
+          <div class="form-group">
+            <label for="setDescription" class="col-form-label">Description:</label>
+            <textarea class="form-control" id="setDescription"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
+        <button type="button" class="btn btn-primary modal-submit" onclick="submitForm()">Save</button>
       </div>
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </body>
 <script>
+  let formControl = "";
   $('#exampleModal').on('show.bs.modal', function (event) {
+
     var button = $(event.relatedTarget) // Button that triggered the modal
-    var recipient = button.data('whatever') // Extract info from data-* attributes
+    var recipient = button.data('title') // Extract info from data-* attributes
+    var control = button.data('control') // Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     var modal = $(this)
-    modal.find('.modal-title').text('New message to ' + recipient)
-    modal.find('.modal-body input').val(recipient)
+    formControl = control;
+    if(control === "set"){
+      document.getElementById("set").style.display = "block";
+      document.getElementById("memberDegree").style.display = "none";
+      document.getElementById("member").style.display = "none";
+      // modal.find('.modal-submit').click(addSet)
+    }else if(control === "memberDegree"){
+      document.getElementById("memberDegree").style.display = "block";
+      document.getElementById("set").style.display = "none";
+      document.getElementById("member").style.display = "none";
+      // modal.find('.modal-submit').click(addSet)
+    }else{
+      document.getElementById("set").style.display = "none";
+      document.getElementById("memberDegree").style.display = "none";
+      document.getElementById("member").style.display = "block";
+      // modal.find('.modal-submit').click(addMember)
+    }
+    modal.find('.modal-title').text(recipient)
+
+    // modal.find('.modal-body input').val(recipient);
+
   })
+
+  let member = {
+    memberName: "",
+    memberDescription: ""
+  };
+
+  document.getElementById("memberName").value = member.memberName;
+  document.getElementById("memberDescription").value = member.memberDescription;
+
+  let fuzzySet = {
+    setName: "",
+    setDescription: ""
+  }
+
+
+  document.getElementById("setName").value = fuzzySet.setName;
+  document.getElementById("setDescription").value = fuzzySet.setDescription;
+
+  function fetchFuzzySets() {
+    fetch(window.location.origin + "/fuzzy_sets" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let output = "";
+              data.forEach(set => {
+                output += `
+                <tr>
+            <th scope="row">${set.setId}</th>
+            <td>${set.setName}</td>
+            <td>${set.setDescription !== null ? set.setDescription : ''}</td>
+            <td>
+              <div class="d-flex">
+                <div class="p2" style="margin-right: .20em">
+                  <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
+                          data-bs-target="#exampleModal">Edit</button>
+                </div>
+                <div class="p2">
+                  <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
+                          data-bs-target="#exampleModal">Delete</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+                `;
+              });
+              document.getElementById("setTable").innerHTML = output;
+            });
+  }
+
+  function fetchSetMembers() {
+    fetch(window.location.origin + "/set_members" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let output = "";
+              let options = "";
+              data.forEach(member => {
+                output += `
+                <tr>
+            <th scope="row">${member.memberId}</th>
+            <td>${member.memberName}</td>
+            <td>${member.memberDescription !== null ? member.memberDescription : ''}</td>
+            <td>
+              <div class="d-flex">
+                <div class="p2" style="margin-right: .20em">
+                  <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
+                          data-bs-target="#exampleModal">Edit</button>
+                </div>
+                <div class="p2">
+                  <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
+                          data-bs-target="#exampleModal">Delete</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+                `;
+                options += `
+                 <option value="${member.memberId}">${member.memberName}</option>
+                `;
+              });
+              document.getElementById("memberTable").innerHTML = output;
+              document.getElementById("memberId").innerHTML = options;
+            });
+  }
+  function fetchMemberDegree() {
+    fetch(window.location.origin + "/member_degrees" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let output = "";
+              data.forEach(member => {
+                output += `
+                <tr>
+            <th scope="row">${member.memberDegreeId}</th>
+            <td>${member.memberName}</td>
+            <td>${member.degreeOfMembership}</td>
+            <td>${member.degreeDescription}</td>
+            <td>
+              <div class="d-flex">
+                <div class="p2" style="margin-right: .20em">
+                  <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
+                          data-bs-target="#exampleModal">Edit</button>
+                </div>
+                <div class="p2">
+                  <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
+                          data-bs-target="#exampleModal">Delete</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+                `;
+              });
+              document.getElementById("memberDegreeTable").innerHTML = output;
+            });
+  }
+
+  fetchFuzzySets();
+  fetchSetMembers();
+  fetchMemberDegree();
+
+  function addSet(){
+    let setName = document.getElementById("setName").value;
+    let setDescription = document.getElementById("setDescription").value;
+    let body = {setName, setDescription};
+    console.log(body);
+    if(setName && setDescription)
+        fetch(window.location.origin + '/fuzzy_sets/add', {
+          method: 'POST',
+          headers: {
+            Accept: 'application.json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body),
+          cache: 'default'
+        }).then(response => {
+          console.log(response);
+          document.getElementById("setName").value = "";
+          document.getElementById("setDescription").value = "";
+          fetchFuzzySets();
+        });
+  }
+
+  function addMember(){
+    let memberName = document.getElementById("memberName").value;
+    let memberDescription = document.getElementById("memberDescription").value;
+    if(memberName && memberDescription)
+        fetch(window.location.origin + '/set_members/add', {
+          method: 'POST',
+          headers: {
+            Accept: 'application.json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({memberName, memberDescription})
+        }).then(response => {
+          document.getElementById("memberName").value = "";
+          document.getElementById("memberDescription").value = "";
+          fetchSetMembers();
+        });
+  }
+  function addMemberDegree(){
+    let memberId = document.getElementById("memberId").value;
+    let degree = document.getElementById("degree").value;
+    let description = document.getElementById("description").value;
+    if(memberId && degree && description)
+        fetch(window.location.origin + '/member_degrees/add', {
+          method: 'POST',
+          headers: {
+            Accept: 'application.json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({memberId, degree, description})
+        }).then(response => {
+          document.getElementById("memberId").value = "";
+          document.getElementById("degree").value = "";
+          document.getElementById("description").value = "";
+          fetchMemberDegree();
+        });
+  }
+
+  function submitForm(){
+    if(formControl === "set")
+      addSet();
+    else if(formControl === "memberDegree")
+      addMemberDegree();
+    else
+      addMember();
+  }
 </script>
 </html>
