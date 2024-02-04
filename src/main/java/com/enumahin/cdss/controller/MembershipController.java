@@ -2,6 +2,7 @@ package com.enumahin.cdss.controller;
 
 import com.enumahin.cdss.model.*;
 import com.enumahin.cdss.model.dto.MatchList;
+import com.enumahin.cdss.model.dto.MatchResponse;
 import com.enumahin.cdss.service.MemberDegreeService;
 import com.enumahin.cdss.service.MembershipService;
 import org.springframework.http.HttpStatus;
@@ -54,8 +55,8 @@ public class MembershipController {
     }
 
     @GetMapping("match")
-    public Map<String, Long> match(@RequestBody MatchList matchList) {
-        return membershipService.match(matchList);
+    public List<MatchResponse> match(@RequestBody MatchList matchList) {
+        return membershipService.matchStructure(matchList);
     }
 
 }

@@ -29,4 +29,5 @@ public class FuzzySet {
 
     @OneToMany(fetch = FetchType.EAGER)
     private Set<SetMember> members;
+
 }

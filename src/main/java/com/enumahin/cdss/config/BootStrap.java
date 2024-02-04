@@ -2,6 +2,8 @@ package com.enumahin.cdss.config;
 
 import com.enumahin.cdss.model.*;
 import com.enumahin.cdss.repository.*;
+import com.enumahin.cdss.service.MemberDegreeService;
+import com.enumahin.cdss.service.MembershipService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,16 +16,19 @@ public class BootStrap implements CommandLineRunner {
     private final FuzzySetRepository fuzzySetRepository;
     private final MembershipRepository membershipRepository;
     private final MemberDegreeRepository memberDegreeRepository;
+    private final MembershipService membershipService;
     private final SetMemberRepository setMemberRepository;
 
     public BootStrap(FuzzySetRepository fuzzySetRepository,
                      MembershipRepository membershipRepository,
                      MemberDegreeRepository memberDegreeRepository,
+                     MembershipService membershipService,
                      SetMemberRepository setMemberRepository) {
         this.fuzzySetRepository = fuzzySetRepository;
         this.membershipRepository = membershipRepository;
         this.memberDegreeRepository = memberDegreeRepository;
         this.setMemberRepository = setMemberRepository;
+        this.membershipService = membershipService;
     }
 
     @Override
@@ -63,12 +68,14 @@ public class BootStrap implements CommandLineRunner {
            member.ifPresent(m ->
 
                fuzzySet.ifPresent( set -> {
+                   System.out.println("Member " + m);
                            if (membershipRepository.equalTo(m.getMemberId(), Degree.D1.label).isEmpty())
-                               membershipRepository.save(
+                               membershipService.addMembership(
                                        Membership.builder()
                                                .set(set)
                                                .member(m)
                                                .degreeOfMembership(Degree.D1.label)
+                                               .required(true)
                                                .equality(Equality.EQ)
                                                .build()
                                );

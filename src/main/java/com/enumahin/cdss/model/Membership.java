@@ -20,14 +20,17 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer membershipId;
 
-    @OneToOne
+    @ManyToOne()
     private FuzzySet set;
 
-    @OneToOne
+    @ManyToOne
     private SetMember member;
 
     @Column(name = "degree_of_membership")
     private Double degreeOfMembership;
+
+    @Column()
+    private Boolean required = false;
 //
 //    @OneToOne
 //    @JoinColumn(name = "degree_level")
