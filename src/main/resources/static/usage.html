@@ -66,9 +66,6 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="setup.html">Setup</a>
           </li>
           <li class="nav-item">
@@ -83,15 +80,15 @@
   </nav>
   <div class="row">
     <div class="col">
-      <h2>
-        Clinical Decision Support Expert System <small style="font-size: .50em"> using Fuzzy Logics</small>
-      </h2>
+      <p>
+        Check all the data elements you have, select their respective values, and click on 'Apply Logic' button.
+      </p>
       <div class="card-body">
         <table class="table">
           <thead>
           <tr>
-            <th scope="col" colspan="2">Data Element (Member of a Set)</th>
-            <th scope="col">Degree of Membership (0, 0.25, 0.50, 0.75, 1)</th>
+            <th scope="col" colspan="2">Select Data Element(s) (Member of a Set)</th>
+            <th scope="col">Select Available Value(s) (Degree of Membership)</th>
           </tr>
           </thead>
           <tbody class="table-group-divider" id="dataTable">
@@ -108,7 +105,7 @@
                <div class="modal-footer">
 <!--                 <button type="button" class="btn btn-primary modal-submit" onclick="defuzzificate()">Save</button>-->
                  <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-toggle="modal"
-                         data-control="member" data-title="Matching" data-target="#exampleModal">Save</button>
+                         data-control="member" data-title="Matching" data-target="#exampleModal">Apply Logic</button>
                </div>
              </td>
            </tr>
