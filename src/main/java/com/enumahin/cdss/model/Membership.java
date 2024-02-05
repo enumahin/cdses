@@ -5,13 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "memberships")
+@Table(name = "memberships",
+        uniqueConstraints= @UniqueConstraint(columnNames={"set_set_id", "member_member_id"}))
 @Builder
 public class Membership {
 

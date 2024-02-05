@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "member_degrees")
+@Table(name = "member_degrees",
+        uniqueConstraints= @UniqueConstraint(columnNames={"member_id", "degree"})
+)
 @Builder
 public class MemberDegree {
 
