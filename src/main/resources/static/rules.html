@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CDSS | Rules</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
@@ -16,9 +16,6 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="setup.html">Setup</a>
           </li>
@@ -34,9 +31,6 @@
   </nav>
   <div class="row" style="margin-bottom: 1em">
     <div class="col">
-      <h2>
-        Clinical Decision Support Expert System <small style="font-size: .50em"> using Fuzzy Logics</small>
-      </h2>
     </div>
   </div>
 </div>
@@ -44,7 +38,12 @@
   <div class="col card">
     <div class="d-flex card-header">
       <div class="p2 flex-grow-1">
-        <p class="pt-10">Defined Rules</p>
+        <p class="pt-10">Defined Rules
+          <button type="button" class="btn btn-outline-secondary btn-sm pull-right" data-toggle="modal"
+                  data-control="member" data-title="Add Member" data-target="#exampleModal">Add Rules</button>
+        </p>
+
+
       </div>
     </div>
     <div class="card-body">
@@ -54,29 +53,11 @@
           <th scope="col">Program Area (Fuzzy Set)</th>
           <th scope="col">Data Element (Member of a Set)</th>
           <th scope="col">Degree of Membership (0, 0.25, 0.50, 0.75, 1)</th>
-          <th scope="col">Casualty Level (L, E, H)</th>
+          <th scope="col">Required (Is this a required Attribute)</th>
           <th scope="col">Action</th>
         </tr>
         </thead>
-        <tbody class="table-group-divider">
-        <tr>
-          <th scope="row">Enhanced Adherence Counselling</th>
-          <td>Last Viral Load Result</td>
-          <td>0 (Unsuppressed)</td>
-          <td>E</td>
-          <td>
-            <div class="d-flex">
-              <div class="p2" style="margin-right: .20em">
-                <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Edit</button>
-              </div>
-              <div class="p2">
-                <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Delete</button>
-              </div>
-            </div>
-          </td>
-        </tr>
+        <tbody class="table-group-divider" id="membershipTable">
 
         </tbody>
       </table>
@@ -84,25 +65,184 @@
   </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
-        ...
+        <form>
+          <div class="form-group">
+            <label for="fuzzySetId" class="col-form-label">FuzzySet (Program Area):</label>
+            <select type="text" class="form-control" id="fuzzySetId">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="memberId" class="col-form-label">Member (Data Element | Attribute):</label>
+            <select type="text" class="form-control" id="memberId" onchange="fetchMemberDegree(this.value)">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="degree" class="col-form-label">Degree:</label>
+            <select type="text" class="form-control" id="degree">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="required" class="col-form-label">Required:</label>
+            <select type="text" class="form-control" id="required">
+              <option value=""></option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary modal-submit" onclick="addRule()">Save</button>
       </div>
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+  let formControl = "";
+  $('#exampleModal').on('show.bs.modal', function (event) {
+
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('title') // Extract info from data-* attributes
+    var control = button.data('control') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+    formControl = control;
+    // if(control === "set"){
+    //   document.getElementById("set").style.display = "block";
+    //   document.getElementById("memberDegree").style.display = "none";
+    //   document.getElementById("member").style.display = "none";
+    //   // modal.find('.modal-submit').click(addSet)
+    // }else if(control === "memberDegree"){
+    //   document.getElementById("memberDegree").style.display = "block";
+    //   document.getElementById("set").style.display = "none";
+    //   document.getElementById("member").style.display = "none";
+    //   // modal.find('.modal-submit').click(addSet)
+    // }else{
+    //   document.getElementById("set").style.display = "none";
+    //   document.getElementById("memberDegree").style.display = "none";
+    //   document.getElementById("member").style.display = "block";
+    //   // modal.find('.modal-submit').click(addMember)
+    // }
+    modal.find('.modal-title').text(recipient)
+
+    // modal.find('.modal-body input').val(recipient);
+
+  })
+  function fetchMemberships() {
+    fetch(window.location.origin + "/memberships" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let output = "";
+              data.forEach(membership => {
+                output += `
+                <tr>
+                    <th scope="row">${membership.setName}</th>
+                    <td>${membership.memberName}</td>
+                    <td>${membership.degreeOfMembership} (${membership.degreeDescription})</td>
+                    <td>${membership.required}</td>
+                    <td>
+                      <div class="d-flex">
+                        <div class="p2" style="margin-right: .20em">
+                          <button type="button" class="btn btn-outline-warning btn-sm align-item-end" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModal">Edit</button>
+                        </div>
+                        <div class="p2">
+                          <button type="button" class="btn btn-outline-danger btn-sm align-item-end" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModal">Delete</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              });
+              document.getElementById("membershipTable").innerHTML = output;
+            });
+  }
+  fetchMemberships();
+
+  function fetchFuzzySets() {
+    fetch(window.location.origin + "/fuzzy_sets" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let options = "<option value=''></option>";
+              data.forEach(set => {
+                options += `
+                 <option value="${set.setId}">${set.setName}</option>
+                `;
+              });
+              document.getElementById("fuzzySetId").innerHTML = options;
+            });
+  }
+
+  function fetchSetMembers() {
+    fetch(window.location.origin + "/member_degrees/members" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let options = "<option value=''></option>";
+              data.forEach(member => {
+                options += `
+                 <option value="${member.memberId}">${member.memberName}</option>
+                `;
+              });
+              document.getElementById("memberId").innerHTML = options;
+            });
+  }
+  function fetchMemberDegree(memberId) {
+    fetch(window.location.origin + `/member_degrees/member/${memberId}` , {})
+            .then((response) => response.json())
+            .then(data => {
+              let options = "<option value=''></option>";
+              data.forEach(member => {
+                options += `
+                 <option value="${member.degreeOfMembership}">${member.degreeOfMembership} = ${member.degreeDescription}</option>
+                `;
+              });
+              document.getElementById("degree").innerHTML = options;
+            });
+  }
+
+  fetchFuzzySets();
+  fetchSetMembers();
+  function addRule(){
+    if(document.getElementById("degree").value.length < 1) return;
+    let fuzzySetId = +document.getElementById("fuzzySetId").value;
+    let memberId = +document.getElementById("memberId").value;
+    let degree = document.getElementById("degree").value;
+    let required = document.getElementById("required").value === 'true';
+    let body = {fuzzySetId, memberId, degree, required};
+    console.log(body);
+    if(fuzzySetId > 0 && memberId > 0 && degree >= 0)
+      fetch(window.location.origin + '/memberships/add', {
+        method: 'POST',
+        headers: {
+          Accept: 'application.json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }).then(response => {
+        document.getElementById("fuzzySetId").value = "";
+        document.getElementById("memberId").value = "";
+        document.getElementById("degree").value = "";
+        document.getElementById("required").value = "";
+        fetchMemberships();
+      });
+  }
+</script>
 </body>
 </html>

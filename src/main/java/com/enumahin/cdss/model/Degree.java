@@ -1,23 +1,15 @@
 package com.enumahin.cdss.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public enum Degree {
+    D1(0.0d),
+    D2(0.25),
+    D3(0.5),
+    D4(0.75),
+    D5(1.0d);
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "degrees")
-public class Degree {
+    public final Double label;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "degree_id")
-    private Long degreeId;
-
-    private Double degree;
+    private Degree(Double label){
+        this.label= label;
+    }
 }

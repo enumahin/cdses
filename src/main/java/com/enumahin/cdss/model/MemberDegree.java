@@ -10,20 +10,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "member_degrees")
+@Table(name = "member_degrees",
+        uniqueConstraints= @UniqueConstraint(columnNames={"member_id", "degree"})
+)
 @Builder
 public class MemberDegree {
 
     @Id
     @Column(name = "member_degree_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer memberDegreeId;
 
-    @Column(name = "member_id")
+    @JoinColumn(name = "member_id")
     @ManyToOne
     private SetMember memberId;
 
     @Column(name = "degree")
-    private DegreeEnum degree;
+    private Double degree;
 
     @Column(name = "description")
     private String description;
