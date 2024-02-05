@@ -2,12 +2,17 @@ package com.enumahin.cdss.service;
 
 import com.enumahin.cdss.model.Degree;
 import com.enumahin.cdss.model.Equality;
+import com.enumahin.cdss.model.FuzzySet;
 import com.enumahin.cdss.model.Membership;
 import com.enumahin.cdss.model.dto.MatchList;
 import com.enumahin.cdss.model.dto.MatchResponse;
+import com.enumahin.cdss.model.dto.MembershipDto;
 import com.enumahin.cdss.model.dto.MembershipResponse;
+import com.enumahin.cdss.repository.FuzzySetRepository;
 import com.enumahin.cdss.repository.MembershipRepository;
+import com.enumahin.cdss.repository.SetMemberRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,6 +29,10 @@ public class MembershipService {
     private final MembershipRepository membershipRepository;
 
     private final MemberDegreeService memberDegreeService;
+    @Autowired
+    private SetMemberRepository setMemberRepository;
+    @Autowired
+    private FuzzySetRepository fuzzySetRepository;
 
     // Map<SetId, Map<TotalMemberCount, RequiredMemberCount>
     private final Map<Integer, MatchResponse> setSignatureMap = new HashMap<>();
@@ -34,8 +43,18 @@ public class MembershipService {
     }
 
     @Transactional
-    public Membership addMembership(Membership membership){
-        return membershipRepository.save(membership);
+    public Membership addMembership(MembershipDto membershipDto){
+       return fuzzySetRepository.findById(membershipDto.getFuzzySetId())
+               .flatMap(fuzzySet -> setMemberRepository.findById(membershipDto.getMemberId())
+               .map(setMember -> membershipRepository.save(
+                       Membership.builder()
+                               .set(fuzzySet)
+                               .member(setMember)
+                               .degreeOfMembership(membershipDto.getDegree())
+                               .required(membershipDto.getRequired())
+                               .build()
+               ))).orElse(null);
+
     }
 
     public List<Membership> getMembership(Integer memberId, Degree degree, Equality equality){
@@ -109,31 +128,33 @@ public class MembershipService {
         return membershipRepository.findAllByMemberId(id);
     }
 
-    public Map<Membership, Map<Boolean, Long>> match(MatchList matchList) {
+    public Map<FuzzySet, Map<Boolean, Long>> match(MatchList matchList) {
        return matchList.getMatchList().stream()
-               .map(match -> membershipRepository.equalTo(match.getMemberId(), match.getDegree().label))
+               .map(match -> membershipRepository.equalTo(match.getMemberId(), match.getDegree()))
                .flatMap(List::stream)
 //               .map(set -> set.getSet().getSetName())
-               .collect(Collectors.groupingBy(Function.identity(), Collectors.groupingBy(Membership::getRequired, Collectors.counting())));
+               .collect(Collectors.groupingBy(Membership::getSet, Collectors.groupingBy(Membership::getRequired, Collectors.counting())));
     }
 
     public List<MatchResponse> matchStructure(MatchList matchList){
-        return match(matchList).entrySet().stream()
-                .flatMap(membershipMap -> Stream.of(fromMembership(membershipMap))).toList();
+        Map<FuzzySet, Map<Boolean, Long>> match = match(matchList);
+        System.out.println(match);
+        return match.entrySet().stream()
+                .map(this::fromMembership).toList();
 
     }
 
-    private MatchResponse fromMembership(Map.Entry<Membership, Map<Boolean, Long>> membershipMap){
+    private MatchResponse fromMembership(Map.Entry<FuzzySet, Map<Boolean, Long>> membershipMap){
          return MatchResponse.builder()
-                .setId(membershipMap.getKey().getSet().getSetId())
-                .setName(membershipMap.getKey().getSet().getSetName())
+                .setId(membershipMap.getKey().getSetId())
+                .setName(membershipMap.getKey().getSetName())
                 .actualRequiredCount(
                         membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0)
-                .expectedRequiredCount(mapSignature(membershipMap.getKey().getSet().getSetId()).getExpectedRequiredCount())
+                .expectedRequiredCount(mapSignature(membershipMap.getKey().getSetId()).getExpectedRequiredCount())
                 .actualTotalCount(
                         (membershipMap.getValue().get(false) != null ? membershipMap.getValue().get(false).intValue() : 0) +
                                 (membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0))
-                .expectedTotalCount(mapSignature(membershipMap.getKey().getSet().getSetId()).getExpectedTotalCount())
+                .expectedTotalCount(mapSignature(membershipMap.getKey().getSetId()).getExpectedTotalCount())
                 .build();
     }
 

@@ -4,7 +4,56 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CDSS | Usage</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    .highcharts-figure,
+    .highcharts-data-table table {
+      min-width: 310px;
+      max-width: 800px;
+      margin: 1em auto;
+    }
+
+    #container {
+      height: 400px;
+    }
+
+    .highcharts-data-table table {
+      font-family: Verdana, sans-serif;
+      border-collapse: collapse;
+      border: 1px solid #ebebeb;
+      margin: 10px auto;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+      padding: 1em 0;
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    .highcharts-data-table th {
+      font-weight: 600;
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+      background: #f1f7ff;
+    }
+
+  </style>
 </head>
 <body>
 <div class="container">
@@ -37,11 +86,251 @@
       <h2>
         Clinical Decision Support Expert System <small style="font-size: .50em"> using Fuzzy Logics</small>
       </h2>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col" colspan="2">Data Element (Member of a Set)</th>
+            <th scope="col">Degree of Membership (0, 0.25, 0.50, 0.75, 1)</th>
+          </tr>
+          </thead>
+          <tbody class="table-group-divider" id="dataTable">
+
+          </tbody>
+          <tfoot>
+           <tr>
+             <td>
+               <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               </div>
+             </td>
+             <td colspan="2">
+               <div class="modal-footer">
+<!--                 <button type="button" class="btn btn-primary modal-submit" onclick="defuzzificate()">Save</button>-->
+                 <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" data-toggle="modal"
+                         data-control="member" data-title="Matching" data-target="#exampleModal">Save</button>
+               </div>
+             </td>
+           </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>-->
+<div class="modal fade" id="exampleModal" style="min-width: 70%" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <figure class="highcharts-figure">
+          <div id="container"></div>
+          <p class="highcharts-description">
+          </p>
+        </figure>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+  let checkedMembers = [];
+  let resultSets = [];
+  let expectedMembers = [];
+  let membersFound = [];
+  let expectedRequired = [];
+  let requiredMembersFound = [];
+  function fetchSetMembers() {
+    fetch(window.location.origin + "/member_degrees/members" , {})
+            .then((response) => response.json())
+            .then(data => {
+              let output = "";
+              let options = "";
+              data.forEach(member => {
+                output += `
+                <tr>
+            <td>
+                <div class="form-group">
+                  <input type="checkbox" id="member_${member.memberId}" onchange="getDegrees(${member.memberId})"/>
+                </div>
+            </td>
+            <td>${member.memberName}</td>
+            <td>
+                <div class="form-group">
+                  <select type="text" class="form-control" id="degree_${member.memberId}">
+
+                  </select>
+                </div>
+            </td>
+          </tr>
+                `;
+                options += `
+                 <option value="${member.memberId}">${member.memberName}</option>
+                `;
+              });
+              document.getElementById("dataTable").innerHTML = output;
+            });
+  }
+  fetchSetMembers();
+
+  function getDegrees(e){
+    let arr = `member_${e}`;
+    if(document.getElementById(arr).checked){
+      checkedMembers.push(e);
+      fetchMemberDegree(e);
+    }else{
+      checkedMembers = checkedMembers.filter(c => c !== e);
+      document.getElementById("degree_"+e).innerHTML = "";
+    }
+    // console.log(checkedMembers);
+  }
+  function fetchMemberDegree(memberId) {
+    fetch(window.location.origin + `/member_degrees/member/${memberId}` , {})
+            .then((response) => response.json())
+            .then(data => {
+              let options = "<option value=''></option>";
+              data.forEach(member => {
+                options += `
+                 <option value="${member.degreeOfMembership}">${member.degreeOfMembership} = ${member.degreeDescription}</option>
+                `;
+              });
+              document.getElementById("degree_"+memberId).innerHTML = options;
+            });
+  }
+
+  // function defuzzificate(){
+  $('#exampleModal').on('show.bs.modal', function (event) {
+
+      let fuzzyArray = [];
+      checkedMembers.filter(c => document.getElementById("degree_"+c).value.length > 0)
+                    .forEach(ele => fuzzyArray.push({memberId: ele, degree: +document.getElementById("degree_"+ele).value}));
+      console.log(fuzzyArray)
+      if(fuzzyArray.length > 0)
+        fetch(window.location.origin + '/memberships/match', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({matchList: fuzzyArray})
+        }).then(response => {
+          return response.json();
+        }).then(data => {
+           checkedMembers = [];
+           resultSets = [];
+           expectedMembers = [];
+           membersFound = [];
+           expectedRequired = [];
+           requiredMembersFound = [];
+          console.log(data);
+          data.forEach(result => {
+             resultSets.push(result.setName);
+             expectedMembers.push(result.expectedTotalCount);
+             membersFound = [result.actualTotalCount];
+             expectedRequired.push(result.expectedRequiredCount);
+            requiredMembersFound.push(result.actualRequiredCount);
+          })
+          Highcharts.chart('container', {
+            chart: {
+              type: 'column'
+            },
+            title: {
+              text: 'Clinical Decision Support System'
+            },
+            xAxis: {
+              categories: resultSets
+            },
+            yAxis: [{
+              min: 0,
+              max: 1,
+              title: {
+                text: 'Degree of Membership'
+              }
+            }, {
+              title: {
+                text: 'Total Attributes'
+              },
+              opposite: true
+            }],
+            legend: {
+              shadow: false
+            },
+            tooltip: {
+              shared: true
+            },
+            plotOptions: {
+              column: {
+                grouping: false,
+                shadow: false,
+                borderWidth: 0
+              }
+            },
+            series: [{
+              name: 'Total Expected Members',
+              color: 'rgba(165,170,217,1)',
+              data: expectedMembers,
+              pointPadding: 0.3,
+              pointPlacement: -0.2
+            }, {
+              name: 'Matched Members',
+              color: 'rgba(126,86,134,.9)',
+              data: membersFound,
+              pointPadding: 0.4,
+              pointPlacement: -0.2
+            }, {
+              name: 'Total Required Members',
+              color: 'rgba(248,161,63,1)',
+              data: expectedRequired,
+              // tooltip: {
+              //   valuePrefix: '$',
+              //   valueSuffix: ' M'
+              // },
+              pointPadding: 0.3,
+              pointPlacement: 0.2,
+              yAxis: 1
+            }, {
+              name: 'Required Members Matched',
+              color: 'rgba(186,60,61,.9)',
+              data: requiredMembersFound,
+              // tooltip: {
+              //   valuePrefix: '$',
+              //   valueSuffix: ' M'
+              // },
+              pointPadding: 0.4,
+              pointPlacement: 0.2,
+              yAxis: 1
+            }]
+          });
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var recipient = button.data('title') // Extract info from data-* attributes
+          var control = button.data('control') // Extract info from data-* attributes
+          var modal = $(this)
+          formControl = control;
+          modal.find('.modal-title').text(recipient)
+
+        });
+
+  // }
+  })
+
+
+</script>
 </body>
 </html>

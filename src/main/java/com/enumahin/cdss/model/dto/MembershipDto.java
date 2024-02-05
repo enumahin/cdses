@@ -9,7 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Match {
+public class MembershipDto {
+
+    private Integer fuzzySetId;
+
     private Integer memberId;
+
     private Double degree;
+
+    private Boolean required = false;
 }

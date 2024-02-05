@@ -221,22 +221,22 @@
 
   })
 
-  let member = {
-    memberName: "",
-    memberDescription: ""
-  };
-
-  document.getElementById("memberName").value = member.memberName;
-  document.getElementById("memberDescription").value = member.memberDescription;
-
-  let fuzzySet = {
-    setName: "",
-    setDescription: ""
-  }
-
-
-  document.getElementById("setName").value = fuzzySet.setName;
-  document.getElementById("setDescription").value = fuzzySet.setDescription;
+  // let member = {
+  //   memberName: "",
+  //   memberDescription: ""
+  // };
+  //
+  // document.getElementById("memberName").value = member.memberName;
+  // document.getElementById("memberDescription").value = member.memberDescription;
+  //
+  // let fuzzySet = {
+  //   setName: "",
+  //   setDescription: ""
+  // }
+  //
+  //
+  // document.getElementById("setName").value = fuzzySet.setName;
+  // document.getElementById("setDescription").value = fuzzySet.setDescription;
 
   function fetchFuzzySets() {
     fetch(window.location.origin + "/fuzzy_sets" , {})

@@ -45,8 +45,9 @@ public class MemberDegreeService {
         return memberDegreeRepository.findAll();
     }
 
-    public List<MemberDegree> getByMemberId(Integer memberId){
-        return memberDegreeRepository.findAllByMemberId(memberId);
+    public List<MemberDegreeResponse> getByMemberId(Integer memberId){
+        return memberDegreeRepository.findAllByMemberId(memberId)
+                .stream().map(build()).toList();
     }
 
     public List<MemberDegreeResponse> memberDegreeResponse(){
@@ -69,5 +70,11 @@ public class MemberDegreeService {
 
     public Optional<MemberDegree> getByMemberIdAndDegree(Integer memberId, Double degree){
         return memberDegreeRepository.findAllByMemberIdAndDegree(memberId, degree);
+    }
+
+    public List<SetMember> getAllMember() {
+        return memberDegreeRepository.findAll().stream().map(
+                MemberDegree::getMemberId
+        ).distinct().toList();
     }
 }

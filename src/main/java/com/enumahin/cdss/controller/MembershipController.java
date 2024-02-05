@@ -3,6 +3,7 @@ package com.enumahin.cdss.controller;
 import com.enumahin.cdss.model.*;
 import com.enumahin.cdss.model.dto.MatchList;
 import com.enumahin.cdss.model.dto.MatchResponse;
+import com.enumahin.cdss.model.dto.MembershipDto;
 import com.enumahin.cdss.model.dto.MembershipResponse;
 import com.enumahin.cdss.service.MemberDegreeService;
 import com.enumahin.cdss.service.MembershipService;
@@ -28,9 +29,9 @@ public class MembershipController {
         return membershipService.build();
     }
 
-    @PostMapping
-    public ResponseEntity<Membership> create(@RequestBody Membership membership) {
-        return new ResponseEntity<>(membershipService.addMembership(membership), HttpStatus.CREATED);
+    @PostMapping(value = "/add")
+    public ResponseEntity<Membership> create(@RequestBody MembershipDto membershipDto) {
+        return new ResponseEntity<>(membershipService.addMembership(membershipDto), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
@@ -55,8 +56,9 @@ public class MembershipController {
         return membershipService.getMembership(memberId, degree, equality);
     }
 
-    @GetMapping("match")
+    @PostMapping("match")
     public List<MatchResponse> match(@RequestBody MatchList matchList) {
+        System.out.println(matchList);
         return membershipService.matchStructure(matchList);
     }
 

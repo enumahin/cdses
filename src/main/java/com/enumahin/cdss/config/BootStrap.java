@@ -16,19 +16,16 @@ public class BootStrap implements CommandLineRunner {
     private final FuzzySetRepository fuzzySetRepository;
     private final MembershipRepository membershipRepository;
     private final MemberDegreeRepository memberDegreeRepository;
-    private final MembershipService membershipService;
     private final SetMemberRepository setMemberRepository;
 
     public BootStrap(FuzzySetRepository fuzzySetRepository,
                      MembershipRepository membershipRepository,
                      MemberDegreeRepository memberDegreeRepository,
-                     MembershipService membershipService,
                      SetMemberRepository setMemberRepository) {
         this.fuzzySetRepository = fuzzySetRepository;
         this.membershipRepository = membershipRepository;
         this.memberDegreeRepository = memberDegreeRepository;
         this.setMemberRepository = setMemberRepository;
-        this.membershipService = membershipService;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class BootStrap implements CommandLineRunner {
                fuzzySet.ifPresent( set -> {
                    System.out.println("Member " + m);
                            if (membershipRepository.equalTo(m.getMemberId(), Degree.D1.label).isEmpty())
-                               membershipService.addMembership(
+                               membershipRepository.save(
                                        Membership.builder()
                                                .set(set)
                                                .member(m)

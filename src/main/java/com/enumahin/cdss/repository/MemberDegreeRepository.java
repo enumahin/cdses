@@ -17,7 +17,7 @@ public interface MemberDegreeRepository extends CrudRepository<MemberDegree, Int
 
     MemberDegree save(MemberDegree memberDegree);
 
-    @Query("Select m from MemberDegree as m where m.memberId=?1")
+    @Query("Select m from MemberDegree as m where m.memberId.memberId=?1")
     List<MemberDegree> findAllByMemberId(Integer memberId);
 
     @Query("Select m from MemberDegree as m where m.memberId.memberId=?1 AND m.degree=?2")

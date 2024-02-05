@@ -40,8 +40,13 @@ public class MemberDegreeController {
     }
 
     @GetMapping("member/{id}")
-    public List<MemberDegree> findByMemberId(@PathVariable("id") Integer id) {
+    public List<MemberDegreeResponse> findByMemberId(@PathVariable("id") Integer id) {
         return memberDegreeService.getByMemberId(id);
+    }
+
+    @GetMapping("members")
+    public List<SetMember> findAllMembers() {
+        return memberDegreeService.getAllMember();
     }
 
 //    @GetMapping("set/{id}")
