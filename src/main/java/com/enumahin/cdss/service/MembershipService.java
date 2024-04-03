@@ -15,10 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -152,8 +149,10 @@ public class MembershipService {
                         membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0)
                 .expectedRequiredCount(mapSignature(membershipMap.getKey().getSetId()).getExpectedRequiredCount())
                 .actualTotalCount(
-                        (membershipMap.getValue().get(false) != null ? membershipMap.getValue().get(false).intValue() : 0) +
-                                (membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0))
+                        Math.toIntExact(membershipMap.getValue().values().stream().filter(Objects::nonNull).reduce(Long::sum).get())
+//                        (membershipMap.getValue().get(false) != null ? membershipMap.getValue().get(false).intValue() : 0) +
+//                                (membershipMap.getValue().get(true) != null ? membershipMap.getValue().get(true).intValue() :0)
+                )
                 .expectedTotalCount(mapSignature(membershipMap.getKey().getSetId()).getExpectedTotalCount())
                 .build();
     }

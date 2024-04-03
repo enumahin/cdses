@@ -216,6 +216,12 @@
   $('#exampleModal').on('show.bs.modal', function (event) {
 
       let fuzzyArray = [];
+      // checkedMembers = [];
+      resultSets = [];
+      expectedMembers = [];
+      membersFound = [];
+      expectedRequired = [];
+      requiredMembersFound = [];
       checkedMembers.filter(c => document.getElementById("degree_"+c).value.length > 0)
                     .forEach(ele => fuzzyArray.push({memberId: ele, degree: +document.getElementById("degree_"+ele).value}));
       console.log(fuzzyArray)
@@ -230,20 +236,17 @@
         }).then(response => {
           return response.json();
         }).then(data => {
-           checkedMembers = [];
-           resultSets = [];
-           expectedMembers = [];
-           membersFound = [];
-           expectedRequired = [];
-           requiredMembersFound = [];
           console.log(data);
-          data.forEach(result => {
-             resultSets.push(result.setName);
-             expectedMembers.push(result.expectedTotalCount);
-             membersFound = [result.actualTotalCount];
-             expectedRequired.push(result.expectedRequiredCount);
-            requiredMembersFound.push(result.actualRequiredCount);
+          data.filter(r => (r.actualTotalCount / r.expectedTotalCount) * 100 >= 75 &&
+                  (r.actualRequiredCount / r.expectedRequiredCount) * 100 >= 75)
+                  .forEach(result => {
+              resultSets.push(result.setName);
+              expectedMembers.push(result.expectedTotalCount);
+              membersFound.push(result.actualTotalCount);
+              expectedRequired.push(result.expectedRequiredCount);
+              requiredMembersFound.push(result.actualRequiredCount);
           })
+          console.log(membersFound);
           Highcharts.chart('container', {
             chart: {
               type: 'column'
@@ -256,7 +259,7 @@
             },
             yAxis: [{
               min: 0,
-              max: 1,
+              max: expectedMembers.max,
               title: {
                 text: 'Degree of Membership'
               }
@@ -286,7 +289,7 @@
               pointPadding: 0.3,
               pointPlacement: -0.2
             }, {
-              name: 'Matched Members',
+              name: 'Total Matched Members',
               color: 'rgba(126,86,134,.9)',
               data: membersFound,
               pointPadding: 0.4,
