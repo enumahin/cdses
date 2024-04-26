@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Match {
+    private String clientId;
     private Integer memberId;
     private Double degree;
+    private String expectedResult;
 }
