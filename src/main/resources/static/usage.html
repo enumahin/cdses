@@ -56,7 +56,7 @@
   </style>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
   <nav class="navbar navbar-expand-lg bg-body-tertiary" style="margin-bottom: 50px">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">CDSS</a>
@@ -78,6 +78,32 @@
       </div>
     </div>
   </nav>
+  <div class="row">
+    <div class="col">
+      <input type="file" id="linelist" name="linelist" class="btn btn-outline-secondary btn-sm align-item-end" />
+    </div>
+    <div class="col">
+      <button type="button" class="btn btn-outline-secondary btn-sm align-item-end" onclick="processBatch()">Process</button>
+    </div>
+    <table class="table" id="output-table" style="max-height: 300px; overflow-y: scroll">
+      <thead>
+      <tr>
+        <th>ClientId</th>
+        <th>Expected Required Members</th>
+        <th>Matched Required Members</th>
+        <th>Expected Total Members</th>
+        <th>Matched Total Members</th>
+        <th>Expected Adherence Counseling</th>
+        <th>System Proposed Counseling</th>
+        <th>Expected Regimen Plan</th>
+        <th>System Proposed Regimen Plan</th>
+      </tr>
+      </thead>
+      <tbody id="output-table-body">
+
+      </tbody>
+    </table>
+  </div>
   <div class="row">
     <div class="col">
       <p>
@@ -147,6 +173,10 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://cdn.tutorialjinni.com/jquery-csv/1.0.11/jquery.csv.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
 <script>
   let checkedMembers = [];
   let resultSets = [];
@@ -154,6 +184,7 @@
   let membersFound = [];
   let expectedRequired = [];
   let requiredMembersFound = [];
+  document.getElementById("output-table").style.display = "none";
   function fetchSetMembers() {
     fetch(window.location.origin + "/member_degrees/members" , {})
             .then((response) => response.json())
@@ -214,7 +245,7 @@
 
   // function defuzzificate(){
   $('#exampleModal').on('show.bs.modal', function (event) {
-
+    document.getElementById("output-table").style.display = "none";
       let fuzzyArray = [];
       // checkedMembers = [];
       resultSets = [];
@@ -331,6 +362,58 @@
   })
 
 
+  const processBatch = () => {
+    const upload = document.getElementById("linelist").files[0]
+    console.log(upload);
+    if (!upload) return;
+    const file = new FormData();
+    file.append("linelist", upload, upload.name)
+    fetch(window.location.origin + '/memberships/match-batch', {
+      method: 'POST',
+      body: file
+    }).then(response => {
+      return response.json();
+    }).then(data => {
+      document.getElementById("output-table").style.display = "block";
+      let output = "";
+      data.forEach(record => {
+        output += `<tr>
+                        <td>${record.clientId}</td>
+                        <td>${record.expectedRequiredCount}</td>
+                        <td>${record.actualRequiredCount}</td>
+                        <td>${record.expectedTotalCount}</td>
+                        <td>${record.actualTotalCount}</td>
+                        <td>${record.expectedCounseling}</td>
+                        <td>${record.proposedCounseling}</td>
+                        <td>${record.expectedRegimenPlan}</td>
+                        <td>${record.proposedRegimenPlan}</td>
+                    </tr>`;
+      });
+      document.getElementById("output-table-body").innerHTML = output;
+      console.log(data);
+      generateAsExcel(data);
+    });
+  }
+
+  function generateAsExcel(data) {
+    // Convert to csv
+    const csv = $.csv.fromObjects(data);
+
+    // Download file as csv function
+    const downloadBlobAsFile = function(csv, filename){
+      var downloadLink = document.createElement("a");
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var url = URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = filename;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+
+    // Download csv file
+    downloadBlobAsFile(csv, 'filename.csv');
+  }
 </script>
 </body>
 </html>

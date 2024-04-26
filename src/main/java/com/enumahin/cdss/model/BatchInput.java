@@ -1,17 +1,19 @@
-package com.enumahin.cdss.model.dto;
+package com.enumahin.cdss.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Match {
+@Data
+public class BatchInput {
+
     private String clientId;
-    private Integer memberId;
-    private Double degree;
+
+    private boolean eligible;
+
+    private int vlCount;
+
     private String expectedResult;
 }
